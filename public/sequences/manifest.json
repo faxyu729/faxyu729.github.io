@@ -1,0 +1,11 @@
+{
+  "count": 144,
+  "width": 1200,
+  "height": 1200,
+  "mobileWidth": 600,
+  "format": "webp",
+  "scenes": [
+    "core",
+    "archive"
+  ]
+}

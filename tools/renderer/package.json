@@ -1,0 +1,5 @@
+{
+  "name": "xinyu-offline-renderer",
+  "private": true,
+  "dependencies": {"three": "0.185.1", "playwright": "1.62.1", "sharp": "0.35.4"}
+}

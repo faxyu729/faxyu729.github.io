@@ -1,0 +1,601 @@
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { works, contact } from "./content";
+import {
+  MotionPreferenceProvider,
+  useMotionPreference,
+} from "./hooks/useMotionPreference";
+import SequenceCanvas from "./components/SequenceCanvas";
+import useStoryMotion from "./hooks/useStoryMotion";
+const Arrow = ({ diagonal = false }) => (
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path
+      d={diagonal ? "M6 18 18 6M6 6h12v12" : "M4 12h15m-6-6 6 6-6 6"}
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+const names = ["序章", "關於", "觀測", "拆解", "作品", "聯絡"],
+  ids = ["home", "about", "observation", "archive", "works", "contact"];
+const nodes = [
+  [120, 230, "日誌"],
+  [290, 100, "應用"],
+  [305, 350, "請求"],
+  [490, 230, "系統"],
+  [675, 100, "觀測"],
+  [685, 360, "分析"],
+  [860, 230, "理解"],
+];
+const edges = [
+  [0, 1],
+  [0, 2],
+  [1, 3],
+  [2, 3],
+  [3, 4],
+  [3, 5],
+  [4, 6],
+  [5, 6],
+  [1, 4],
+  [2, 5],
+];
+function WorkCard({ work, index }) {
+  const [open, setOpen] = useState(false),
+    { motionEnabled } = useMotionPreference();
+  return (
+    <motion.article
+      className={`work-card work-${index}`}
+      onFocusCapture={(event) => {
+        if (!motionEnabled || window.innerWidth <= 900) return;
+        const card = event.currentTarget;
+        const rect = card.getBoundingClientRect();
+        if (rect.left >= 0 && rect.right <= window.innerWidth) return;
+        const section = card.closest('#works');
+        const track = card.parentElement;
+        const viewport = track.parentElement;
+        const travel = track.scrollWidth - viewport.clientWidth;
+        if (travel <= 0) return;
+        const progress = Math.min(1, card.offsetLeft / travel);
+        const top = window.scrollY + section.getBoundingClientRect().top;
+        window.scrollTo({ top: top + progress * (section.offsetHeight - window.innerHeight), behavior: 'smooth' });
+      }}
+      layout={motionEnabled}
+      transition={
+        motionEnabled
+          ? { type: "spring", stiffness: 220, damping: 25 }
+          : { duration: 0 }
+      }
+    >
+      <div className="work-image">
+        <img
+          src={work.image}
+          alt={work.imageAlt}
+          loading="lazy"
+          width="1200"
+          height="675"
+        />
+        <span className="work-number">0{index + 1}</span>
+      </div>
+      <div className="work-body">
+        <span className="eyebrow">{work.note}</span>
+        <h3>{work.name}</h3>
+        <p>{work.description}</p>
+        <div className="work-actions">
+          <a
+            className="text-link"
+            href={work.pdf}
+            target="_blank"
+            rel="noreferrer"
+          >
+            閱讀作品 <Arrow diagonal />
+          </a>
+          <motion.button
+            whileTap={motionEnabled ? { scale: 0.92 } : undefined}
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls={`details-${index}`}
+            className="detail-button"
+            aria-label={`${open ? "收合" : "展開"}${work.name}的作品重點`}
+          >
+            {open ? "−" : "＋"}
+          </motion.button>
+        </div>
+        <AnimatePresence initial={false}>
+          {open && (
+            <motion.div
+              id={`details-${index}`}
+              className="work-details"
+              initial={motionEnabled ? { height: 0, opacity: 0 } : false}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={
+                motionEnabled
+                  ? { type: "spring", stiffness: 220, damping: 25 }
+                  : { duration: 0 }
+              }
+            >
+              <div>
+                <p>作品關鍵字</p>
+                <ul>
+                  {work.tags.map((t) => (
+                    <li key={t}>{t}</li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.article>
+  );
+}
+function Portfolio() {
+  const page = useRef(null),
+    core = useRef(null),
+    archive = useRef(null),
+    { motionEnabled, toggleMotion } = useMotionPreference();
+  const [active, setActive] = useState(0),
+    [menu, setMenu] = useState(false);
+  useStoryMotion(page, core, archive, motionEnabled);
+  useEffect(() => {
+    const sections = ids.map((id) => document.getElementById(id));
+    const observer = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(sections.indexOf(e.target));
+        }),
+      { rootMargin: "-20% 0px -55% 0px", threshold: 0 },
+    );
+    sections.forEach((s) => observer.observe(s));
+    // Fragment targets do not exist until React mounts on an initial deep link.
+    let secondFrame;
+    const firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        const id = window.location.hash.slice(1);
+        if (ids.includes(id) || id === 'main') {
+          document.getElementById(id)?.scrollIntoView({ behavior: 'instant', block: 'start' });
+        }
+      });
+    });
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(firstFrame);
+      cancelAnimationFrame(secondFrame);
+    };
+  }, []);
+  return (
+    <div
+      ref={page}
+      className={`portfolio ${motionEnabled ? "motion-on" : "motion-off"}`}
+    >
+      <a href="#main" className="skip-link">
+        跳到主要內容
+      </a>
+      <div className="reading-progress" aria-hidden="true" />
+      <header className="site-nav glass">
+        <a href="#home" className="brand" onClick={() => setMenu(false)}>
+          <span className="brand-mark" aria-hidden="true">
+            ✳
+          </span>
+          <span>
+            范芯瑜<span className="brand-sub">流光檔案館</span>
+          </span>
+        </a>
+        <nav
+          aria-label="主導覽"
+          className={menu ? "nav-links is-open" : "nav-links"}
+        >
+          {[
+            ["about", "關於我"],
+            ["works", "精選作品"],
+            ["contact", "聯絡我"],
+          ].map(([id, label]) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              onClick={() => setMenu(false)}
+              aria-current={ids[active] === id ? "location" : undefined}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+        <div className="nav-tools">
+          <button
+            className="motion-toggle"
+            aria-pressed={motionEnabled}
+            onClick={toggleMotion}
+            aria-label={motionEnabled ? "關閉動態效果" : "開啟動態效果"}
+          >
+            <span aria-hidden="true">{motionEnabled ? "◉" : "○"}</span>
+            <span>動態{motionEnabled ? "開啟" : "關閉"}</span>
+          </button>
+          <button
+            className="menu-toggle"
+            onClick={() => setMenu((v) => !v)}
+            aria-expanded={menu}
+            aria-label="切換導覽選單"
+          >
+            {menu ? "關閉" : "選單"}
+          </button>
+        </div>
+      </header>
+      <aside className="chapter-nav" aria-label="章節導覽">
+        {ids.map((id, i) => (
+          <a
+            key={id}
+            href={`#${id}`}
+            className={active === i ? "active" : ""}
+            aria-label={`${i + 1} ${names[i]}`}
+            aria-current={active === i ? "location" : undefined}
+          >
+            <span>{String(i + 1).padStart(2, "0")}</span>
+            <i />
+          </a>
+        ))}
+      </aside>
+      <main id="main">
+        <section
+          id="home"
+          className="hero scroll-scene"
+          aria-labelledby="hero-title"
+        >
+          <div className="scene-sticky hero-stage">
+            <div className="hero-aurora" aria-hidden="true" />
+            <div className="hero-grid" aria-hidden="true" />
+            <div className="hero-copy">
+              <p className="eyebrow">
+                <span className="tiny-dot" />
+                范芯瑜的個人作品集
+              </p>
+              <h1 id="hero-title">
+                想法，
+                <br />
+                <span>正在成形。</span>
+              </h1>
+              <p className="hero-description">
+                從一個好奇的念頭，
+                <br />
+                到值得被看見的作品。
+              </p>
+              <a className="pill primary" href="#works">
+                探索我的作品 <Arrow />
+              </a>
+            </div>
+            <div className="hero-sequence">
+              <SequenceCanvas
+                ref={core}
+                scene="core"
+                label="冰藍與淡紫的原創立體核心，隨滾動旋轉展開"
+                eager
+              />
+              <span className="object-label object-label-a">
+                <i />
+                觀察
+              </span>
+              <span className="object-label object-label-b">
+                <i />
+                連結
+              </span>
+              <span className="object-label object-label-c">
+                <i />
+                創造
+              </span>
+            </div>
+            <div className="hero-second">
+              <p className="eyebrow">每個方向，都有新的發現</p>
+              <h2>
+                讓好奇，
+                <br />
+                有了形狀。
+              </h2>
+              <p>
+                程式、文化與日常，
+                <br />
+                在這裡慢慢連成自己的樣子。
+              </p>
+            </div>
+            <div className="hero-footer">
+              <span>澎湖科技大學 · 資訊工程</span>
+              <span className="scroll-invitation">
+                向下捲動，展開故事 <span>↓</span>
+              </span>
+              <span>01 — 06</span>
+            </div>
+          </div>
+        </section>
+        <section
+          id="about"
+          className="about-section"
+          aria-labelledby="about-title"
+        >
+          <div className="portal" aria-hidden="true" />
+          <div className="about-orbit" aria-hidden="true" />
+          <div className="section-top reveal">
+            <span className="eyebrow">01 / 關於我</span>
+            <span className="small-note">在學習中，持續探索。</span>
+          </div>
+          <div className="about-content">
+            <h2 id="about-title" className="about-statement">
+              <span className="about-line">觀察細節。</span>
+              <br />
+              <span className="about-line">連結不同的知識。</span>
+              <br />
+              <span className="about-line">把理解，變成作品。</span>
+            </h2>
+            <div className="about-bio reveal">
+              <span className="profile-symbol" aria-hidden="true">
+                瑜
+              </span>
+              <div>
+                <h3>你好，我是范芯瑜。</h3>
+                <p>
+                  就讀澎湖科技大學資訊工程學系二年級甲班。
+                  <br />
+                  這裡收錄我的系統觀測、文化參訪與資訊整理作品，記錄學習過程中的每一次發現。
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="about-index reveal">
+            <div>
+              <span>01</span>
+              <strong>系統與資料</strong>
+              <small>從現象看見問題</small>
+            </div>
+            <div>
+              <span>02</span>
+              <strong>地方與文化</strong>
+              <small>在日常裡發現故事</small>
+            </div>
+            <div>
+              <span>03</span>
+              <strong>知識與表達</strong>
+              <small>讓資訊更容易理解</small>
+            </div>
+          </div>
+        </section>
+        <section
+          id="observation"
+          className="observation scroll-scene"
+          aria-labelledby="observation-title"
+        >
+          <div className="scene-sticky observation-stage">
+            <div className="section-top">
+              <span className="eyebrow">02 / 系統觀測</span>
+              <span className="small-note">精選作品 01</span>
+            </div>
+            <div className="observation-heading">
+              <h2 id="observation-title">
+                在複雜之中，
+                <br />
+                <span>找到線索。</span>
+              </h2>
+              <p>
+                抓出讓系統卡頓的元兇。
+                <br />以 ELK 與圖論建模，觀察選課系統的異常行為。
+              </p>
+            </div>
+            <div className="graph-wrap">
+              <svg
+                className="system-graph"
+                viewBox="0 0 980 460"
+                role="img"
+                aria-label="系統觀測概念示意：從日誌與請求，經系統分析到理解問題，非實測資料"
+              >
+                <defs>
+                  <linearGradient id="line-gradient">
+                    <stop stopColor="#4c8be8" />
+                    <stop offset="1" stopColor="#9b83d2" />
+                  </linearGradient>
+                </defs>
+                {edges.map(([a, b], i) => (
+                  <path
+                    className="graph-line"
+                    key={i}
+                    d={`M${nodes[a][0]} ${nodes[a][1]} Q${(nodes[a][0] + nodes[b][0]) / 2} ${nodes[a][1]} ${nodes[b][0]} ${nodes[b][1]}`}
+                    fill="none"
+                    stroke="url(#line-gradient)"
+                    strokeWidth="1.5"
+                    pathLength="1"
+                    strokeDasharray="1"
+                  />
+                ))}
+                {nodes.map(([x, y, name], i) => (
+                  <g className="graph-node" key={name}>
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r={i === 3 ? 58 : 38}
+                      fill={i === 3 ? "#e3edff" : "#f9fbff"}
+                      stroke="#adc5e7"
+                    />
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r={i === 3 ? 70 : 48}
+                      fill="none"
+                      stroke="#dbe6f6"
+                    />
+                    <text x={x} y={y + 5} textAnchor="middle">
+                      {name}
+                    </text>
+                  </g>
+                ))}
+              </svg>
+              <span className="graph-caption">系統觀測概念示意</span>
+            </div>
+            <div className="observation-bottom">
+              <div className="observation-points">
+                {[
+                  ["收集", "整理日誌與現象"],
+                  ["連結", "建立關聯與脈絡"],
+                  ["理解", "整理原因與改善方向"],
+                ].map(([t, d], i) => (
+                  <div className="observation-point" key={t}>
+                    <span>0{i + 1}</span>
+                    <strong>{t}</strong>
+                    <small>{d}</small>
+                  </div>
+                ))}
+              </div>
+              <a
+                href={works[0].pdf}
+                className="pill glass"
+                target="_blank"
+                rel="noreferrer"
+              >
+                閱讀完整報告 <Arrow diagonal />
+              </a>
+            </div>
+          </div>
+        </section>
+        <section
+          id="archive"
+          className="archive scroll-scene"
+          aria-labelledby="archive-title"
+        >
+          <div className="scene-sticky archive-stage">
+            <div className="archive-wash" aria-hidden="true" />
+            <div className="section-top">
+              <span className="eyebrow">03 / 展開想法</span>
+              <span className="small-note">從封面，走進內容。</span>
+            </div>
+            <div className="archive-heading">
+              <h2 id="archive-title">
+                每一層，
+                <br />
+                都有新的理解。
+              </h2>
+              <p>讓作品展開，也讓思考的脈絡浮現。</p>
+            </div>
+            <div className="archive-sequence">
+              <SequenceCanvas
+                ref={archive}
+                scene="archive"
+                label="以現有作品簡報製作的立體檔案，隨滾動旋轉並分層展開"
+              />
+            </div>
+            <div className="archive-captions">
+              {[
+                ["看見主題", "一個值得追問的問題"],
+                ["整理脈絡", "讓散落的資訊彼此連結"],
+                ["呈現理解", "把發現整理成完整作品"],
+              ].map(([t, d], i) => (
+                <div className="archive-caption glass" key={t}>
+                  <span>0{i + 1}</span>
+                  <strong>{t}</strong>
+                  <small>{d}</small>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section
+          id="works"
+          className="gallery scroll-scene"
+          aria-labelledby="works-title"
+        >
+          <div className="scene-sticky gallery-stage">
+            <div className="gallery-warm" aria-hidden="true" />
+            <div className="gallery-cool" aria-hidden="true" />
+            <div className="gallery-heading">
+              <div>
+                <p className="eyebrow">04 / 精選作品</p>
+                <h2 id="works-title">
+                  不同的探索，
+                  <br />
+                  <span>同樣的好奇。</span>
+                </h2>
+              </div>
+              <p>
+                在系統、島嶼與天空之間，
+                <br />
+                收集值得分享的發現。
+              </p>
+            </div>
+            <div className="gallery-window">
+              <div className="gallery-track">
+                {works.map((work, index) => (
+                  <WorkCard work={work} index={index} key={work.name} />
+                ))}
+              </div>
+            </div>
+            <div className="gallery-footer">
+              <span>三份作品，三個觀察世界的角度。</span>
+              <span className="desktop-only">繼續向下，向右探索 ⟶</span>
+            </div>
+          </div>
+        </section>
+        <section
+          id="contact"
+          className="contact-section"
+          aria-labelledby="contact-title"
+        >
+          <div className="contact-light" aria-hidden="true">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div className="contact-ray" key={i} style={{ "--i": i }} />
+            ))}
+          </div>
+          <div className="contact-content">
+            <p className="eyebrow reveal">05 / 保持連結</p>
+            <h2 id="contact-title" className="reveal">
+              下一個想法，
+              <br />
+              <span>從一句你好開始。</span>
+            </h2>
+            <p className="contact-intro reveal">
+              關於作品、學習，或一個有趣的點子。
+              <br />
+              歡迎與我聊聊。
+            </p>
+            <div className="contact-links">
+              {contact.items.map((item, i) => (
+                <div className="contact-reveal" key={item.label}>
+                  <motion.a
+                    className="contact-link glass"
+                    href={item.href}
+                    key={item.label}
+                    whileHover={
+                      motionEnabled ? { y: -7, scale: 1.015 } : undefined
+                    }
+                    whileTap={motionEnabled ? { scale: 0.97 } : undefined}
+                    transition={{ type: "spring", stiffness: 290, damping: 19 }}
+                  >
+                    <span className="contact-icon" aria-hidden="true">
+                      {["@", "⌘", "↗"][i]}
+                    </span>
+                    <div>
+                      <small>{item.label}</small>
+                      <span>{item.value}</span>
+                    </div>
+                    <Arrow diagonal />
+                  </motion.a>
+                </div>
+              ))}
+            </div>
+          </div>
+          <footer>
+            <a className="brand" href="#home">
+              <span className="brand-mark" aria-hidden="true">
+                ✳
+              </span>
+              范芯瑜
+            </a>
+            <span>流光檔案館 · 學習與作品的持續記錄</span>
+            <a href="#home">回到頂端 ↑</a>
+          </footer>
+        </section>
+      </main>
+    </div>
+  );
+}
+export default function App() {
+  return (
+    <MotionPreferenceProvider>
+      <Portfolio />
+    </MotionPreferenceProvider>
+  );
+}
