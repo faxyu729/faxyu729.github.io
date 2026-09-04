@@ -28,7 +28,7 @@ export default forwardRef(function SequenceCanvas(
     const small =
         window.matchMedia("(max-width: 700px)").matches ||
         navigator.connection?.saveData,
-      maxCache = small ? 12 : 18,
+      maxCache = 12,
       cache = new Map(),
       pending = new Map(),
       failed = new Set();
@@ -104,6 +104,9 @@ export default forwardRef(function SequenceCanvas(
     seekRef.current = (p) => {
       target = frameAt(p);
       el.dataset.target = String(target);
+      for (const [index, controller] of pending) {
+        if (Math.abs(index - target) > 6) controller.abort();
+      }
       queuePaint();
       pump();
     };

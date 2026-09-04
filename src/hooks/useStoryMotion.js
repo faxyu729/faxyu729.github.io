@@ -54,7 +54,6 @@ export default function useStoryMotion(page, core, archive, enabled) {
         { y: 0, autoAlpha: 1, duration: 0.25 },
         0.5,
       ).to(".hero-second", { autoAlpha: 0, duration: 0.12 }, 0.87);
-      h.to(".hero-aurora", { rotation: 60, scale: 1.5, duration: 1 }, 0);
       gsap.fromTo(
         ".portal",
         { clipPath: "circle(5% at 50% 8%)" },
@@ -120,7 +119,7 @@ export default function useStoryMotion(page, core, archive, enabled) {
       );
       o.from(
         ".observation-point",
-        { opacity: 0.15, y: 28, stagger: 0.3, duration: 0.4 },
+        { opacity: 0.15, y: 28, duration: 0.4 },
         0.15,
       );
       const ap = { p: 0 },
@@ -147,8 +146,7 @@ export default function useStoryMotion(page, core, archive, enabled) {
           ".archive-caption",
           { opacity: 0, y: 40, stagger: 0.17, duration: 0.25 },
           0.15,
-        )
-        .to(".archive-wash", { xPercent: 30, rotation: -30, duration: 1 }, 0);
+        );
       const mm = gsap.matchMedia();
       mm.add("(min-width: 901px)", () => {
         const gallery = document.querySelector(".gallery-track"),
