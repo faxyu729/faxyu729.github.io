@@ -305,6 +305,7 @@ function Portfolio() {
   }, []);
   const navItems = [
     ["home", "首頁"],
+    ["about", "關於我"],
     ["observation", "成長軌跡"],
     ["works", "精選作品"],
     ["contact", "聯絡我"],
