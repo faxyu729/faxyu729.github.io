@@ -246,8 +246,21 @@ function Portfolio() {
       mouseY = -100,
       currX = -100,
       currY = -100,
-      rafId = 0,
+      rafId = null,
       visible = false;
+
+    const loop = () => {
+      currX += (mouseX - currX) * 0.2;
+      currY += (mouseY - currY) * 0.2;
+      glow.style.setProperty("--cursor-x", `${currX}px`);
+      glow.style.setProperty("--cursor-y", `${currY}px`);
+
+      if (Math.abs(mouseX - currX) > 0.1 || Math.abs(mouseY - currY) > 0.1) {
+        rafId = requestAnimationFrame(loop);
+      } else {
+        rafId = null;
+      }
+    };
 
     const onPointerMove = (e) => {
       mouseX = e.clientX;
@@ -264,6 +277,7 @@ function Portfolio() {
       } else {
         glow.classList.remove("is-hover");
       }
+      if (rafId === null) rafId = requestAnimationFrame(loop);
     };
 
     const onPointerLeave = () => {
@@ -271,22 +285,13 @@ function Portfolio() {
       glow.classList.remove("is-visible");
     };
 
-    const loop = () => {
-      currX += (mouseX - currX) * 0.15;
-      currY += (mouseY - currY) * 0.15;
-      glow.style.left = `${currX}px`;
-      glow.style.top = `${currY}px`;
-      rafId = requestAnimationFrame(loop);
-    };
-
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     document.documentElement.addEventListener("mouseleave", onPointerLeave);
-    rafId = requestAnimationFrame(loop);
 
     return () => {
       window.removeEventListener("pointermove", onPointerMove);
       document.documentElement.removeEventListener("mouseleave", onPointerLeave);
-      cancelAnimationFrame(rafId);
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, []);
   useEffect(() => {
