@@ -1,3 +1,10 @@
+const BASE = (() => {
+  try {
+    return import.meta.env.BASE_URL;
+  } catch {
+    return "";
+  }
+})();
 export const FRAME_COUNT = 144;
 export function frameAt(progress, count = FRAME_COUNT) {
   return Math.round(
@@ -6,7 +13,8 @@ export function frameAt(progress, count = FRAME_COUNT) {
   );
 }
 export function frameUrl(scene, index, small = false) {
-  return `/sequences/${scene}/${small ? "mobile/" : ""}${String(index).padStart(3, "0")}.webp`;
+  const slash = BASE.endsWith("/") ? "" : "/";
+  return `${BASE}${slash}sequences/${scene}/${small ? "mobile/" : ""}${String(index).padStart(3, "0")}.webp`;
 }
 export function nearestFrame(indices, target) {
   return indices.length
