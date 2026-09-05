@@ -7,7 +7,7 @@ export const site = {
     { id: 'growth', label: '成長' },
     { id: 'origin', label: '初衷' },
     { id: 'works', label: '作品' },
-    { id: 'contact', label: '聯絡' },
+    { id: 'contact', label: '保持連結' },
   ],
   motionLabelOn: '關閉動態效果',
   motionLabelOff: '開啟動態效果',

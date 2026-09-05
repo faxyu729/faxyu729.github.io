@@ -19,7 +19,7 @@ const Arrow = ({ diagonal = false }) => (
     />
   </svg>
 );
-const names = ["序章", "關於", "成長", "初衷", "作品", "聯絡"],
+const names = ["序章", "關於", "成長", "初衷", "作品", "保持連結"],
   ids = ["home", "about", "growth", "origin", "works", "contact"];
 
 function WorkCard({ work, index }) {
