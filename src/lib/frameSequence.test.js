@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { frameAt, frameUrl, nearestFrame } from "./sequence.js";
+import { frameAt, frameUrl, nearestFrame } from "./frameSequence.js";
 test("scroll maps both directions and clamps overscroll to real frames", () => {
   assert.deepEqual(
     [0, 0.25, 0.5, 1, 0.5, 0, -0.1, 1.2, NaN].map((p) => frameAt(p)),

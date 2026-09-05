@@ -5,7 +5,7 @@ const sharp=require(path.join(deps,'sharp'));
 const root=path.resolve(__dirname,'..'),three=path.join(deps,'three');
 const server=http.createServer((req,res)=>{
  let url=decodeURIComponent(req.url.split('?')[0]);
- const file=url.startsWith('/three/')?path.join(three,url.slice(7)):url==='/render'?path.join(root,'scripts/render-scene.html'):path.join(root,'public',url);
+ const file=url.startsWith('/three/')?path.join(three,url.slice(7)):url==='/render'?path.join(root,'scripts/render-three-sequence-scene.html'):path.join(root,'public',url);
  if(!fs.existsSync(file)){res.writeHead(404);res.end();return}
  res.setHeader('Content-Type',file.endsWith('.js')?'text/javascript':file.endsWith('.html')?'text/html':file.endsWith('.png')?'image/png':'application/octet-stream');fs.createReadStream(file).pipe(res);
 });

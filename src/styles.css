@@ -1737,18 +1737,21 @@ section {
     bottom: clamp(20px, 4svh, 40px);
   }
   .object-label {
-    font-size: 9px;
+    font-size: 8.5px;
+    letter-spacing: 0.08em;
   }
   .object-label-a {
-    left: 6%;
-    top: 20%;
+    left: 5%;
+    top: 18%;
   }
   .object-label-b {
-    left: 6%;
-    bottom: 14%;
+    left: 5%;
+    bottom: 12%;
   }
   .object-label-c {
-    display: none;
+    display: flex;
+    right: 4%;
+    top: 48%;
   }
   .hero-footer {
     bottom: 23px;

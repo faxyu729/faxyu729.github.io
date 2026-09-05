@@ -1553,4 +1553,4 @@ gh pr view <pr-number>
 - [MDN Web Docs](https://developer.mozilla.org/)
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/)
 - `linyoulun/apple.com` 私人教學 repository：學生從零部署、分階段 Prompt 與驗收流程
-- 本專案 `.github/workflows/deploy.yml`、`vite.config.js`、`src/content.js` 與實際 GitHub Pages 部署紀錄
+- 本專案 `.github/workflows/deploy.yml`、`vite.config.js`、`src/portfolioContent.js` 與實際 GitHub Pages 部署紀錄
