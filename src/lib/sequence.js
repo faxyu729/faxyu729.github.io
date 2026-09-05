@@ -23,3 +23,45 @@ export function nearestFrame(indices, target) {
       )
     : null;
 }
+
+export function idlePreloadSequence(
+  scene,
+  frameIndices = [0, 1, 2, 3, 4, 6, 8, 12, 16],
+) {
+  if (typeof window === "undefined") return () => {};
+  if (navigator.connection?.saveData) return () => {};
+
+  const small =
+    window.matchMedia("(max-width: 700px)").matches ||
+    Boolean(navigator.connection?.saveData);
+
+  let cancelled = false;
+  const idleCallback =
+    typeof window.requestIdleCallback === "function"
+      ? window.requestIdleCallback.bind(window)
+      : (cb) => setTimeout(() => cb({ timeRemaining: () => 50 }), 300);
+  const cancelIdle =
+    typeof window.cancelIdleCallback === "function"
+      ? window.cancelIdleCallback.bind(window)
+      : clearTimeout;
+
+  const id = idleCallback(async (deadline) => {
+    for (const index of frameIndices) {
+      if (cancelled) break;
+      if (deadline?.timeRemaining && deadline.timeRemaining() < 5) {
+        await new Promise((r) => setTimeout(r, 60));
+      }
+      try {
+        const url = frameUrl(scene, index, small);
+        await fetch(url, { priority: "low" }).catch(() => {});
+      } catch {
+        // Preload error handled silently
+      }
+    }
+  });
+
+  return () => {
+    cancelled = true;
+    cancelIdle(id);
+  };
+}
