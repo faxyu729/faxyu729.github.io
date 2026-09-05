@@ -4,6 +4,8 @@ export const site = {
   nav: [
     { id: 'home', label: '首頁' },
     { id: 'about', label: '關於' },
+    { id: 'growth', label: '成長' },
+    { id: 'origin', label: '初衷' },
     { id: 'works', label: '作品' },
     { id: 'contact', label: '聯絡' },
   ],

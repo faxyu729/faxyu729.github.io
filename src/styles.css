@@ -16,7 +16,25 @@
 }
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 106px;
+}
+section[id],
+#home,
+#about,
+#growth,
+#origin,
+#archive,
+#works,
+#contact {
+  scroll-margin-top: 0px;
+}
+.scroll-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
 }
 body {
   margin: 0;
@@ -858,6 +876,7 @@ section {
     padding: 14px 18px;
   }
 }
+
 .archive {
   height: 260svh;
 }
@@ -888,17 +907,22 @@ section {
   max-width: 480px;
 }
 .archive-heading h2 {
-  font-size: clamp(40px, 3.6vw, 48px);
+  font-size: clamp(40px, 4.5vw, 48px);
   font-weight: 700;
   line-height: 1.25;
-  color: #1b2b43;
-  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.025em;
 }
 .archive-heading p {
-  font-size: 18px;
+  font-size: clamp(18px, 1.8vw, 20px);
   line-height: 1.6;
-  color: var(--muted);
-  margin-top: 18px;
+  color: #52657d;
+  margin-top: 0;
   max-width: 480px;
 }
 .archive-sequence {
