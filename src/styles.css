@@ -1516,59 +1516,86 @@ section {
     bottom: 8%;
   }
   .gallery {
-    height: auto;
+    height: 270svh;
   }
   .gallery-stage {
-    position: relative;
-    height: auto;
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    max-height: 100svh;
     min-height: 0;
     overflow: hidden;
-    padding: 95px 0 55px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(70px, 11svh, 95px) 0 clamp(16px, 3svh, 28px);
+    box-sizing: border-box;
   }
   .gallery-heading {
     padding: 0 7%;
-    margin-bottom: 35px;
+    margin-bottom: clamp(10px, 2svh, 20px);
+  }
+  .gallery-heading h2 {
+    font-size: clamp(26px, 6vw, 36px);
+    line-height: 1.25;
   }
   .gallery-heading > p {
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 13px;
+    line-height: 1.5;
     max-width: 440px;
+    margin-top: 4px;
   }
   .gallery-window {
     margin: 0 7%;
+    overflow: visible;
   }
   .gallery-track {
-    display: grid;
-    width: 100%;
-    gap: 30px;
+    display: flex;
+    width: max-content;
+    gap: 20px;
+    align-items: stretch;
   }
   .work-card {
-    width: 100%;
-    max-width: 650px;
-    margin: auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    width: min(80vw, 420px);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 18px;
+    max-height: clamp(380px, 58svh, 480px);
+    overflow: hidden;
+    background: #ffffffeb;
   }
   .work-image {
-    height: auto;
-    min-height: 230px;
-    padding: 25px 20px;
+    height: clamp(130px, 18svh, 180px);
+    min-height: 0;
+    padding: 18px 20px;
+    flex-shrink: 0;
   }
   .work-body {
-    padding: 24px;
+    padding: 16px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
   }
   .work-body h3 {
-    font-size: 20px;
+    font-size: 17px;
+    line-height: 1.35;
+    margin: 4px 0 6px;
   }
   .work-body > p {
-    font-size: 12px;
+    font-size: 11.5px;
+    line-height: 1.65;
   }
   .gallery-footer {
-    padding-left: 7%;
-    padding-right: 7%;
+    padding: 12px 7% 0;
+    font-size: 9.5px;
+    display: flex;
+    justify-content: space-between;
   }
   .desktop-only {
-    display: none;
+    display: inline;
   }
   .contact-section {
     padding: 100px 7% 0;
@@ -1639,31 +1666,35 @@ section {
     display: flex;
   }
   .scene-sticky {
-    min-height: 700px;
+    min-height: 0;
     height: 100svh;
+    max-height: 100svh;
+    position: sticky;
+    top: 0;
+    overflow: hidden;
   }
   .hero {
     height: 230svh;
   }
   .hero-copy {
-    top: 132px;
+    top: clamp(85px, 15svh, 125px);
     left: 8%;
     right: 8%;
     text-align: left;
   }
   .hero-copy .eyebrow {
     font-size: 9px;
-    margin-bottom: 17px;
+    margin-bottom: 14px;
   }
   .hero-copy h1 {
-    font-size: 56px;
+    font-size: clamp(38px, 9.5vw, 52px);
     line-height: 1.15;
     letter-spacing: -0.055em;
   }
   .hero-description {
     font-size: 12px;
     line-height: 1.85;
-    margin: 18px 0;
+    margin: 14px 0;
   }
   .hero-copy .pill {
     font-size: 11px;
@@ -1671,12 +1702,11 @@ section {
     gap: 15px;
   }
   .hero-sequence {
-    width: 94vw;
-    height: 94vw;
-    right: -18%;
+    width: clamp(240px, 78vw, 360px);
+    height: clamp(240px, 78vw, 360px);
+    right: -10%;
     top: auto;
-    bottom: 36px;
-    transform: none;
+    bottom: clamp(25px, 5svh, 45px);
   }
   .object-label {
     font-size: 9px;
@@ -1784,28 +1814,35 @@ section {
     height: 225svh;
   }
   .observation-stage {
-    padding: 108px 8% 25px;
-    min-height: 730px;
+    padding: clamp(65px, 10svh, 90px) 7% clamp(14px, 2.5svh, 24px);
+    min-height: 0;
+    height: 100svh;
+    max-height: 100svh;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .observation-heading {
     display: block;
-    margin-top: 35px;
+    margin-top: 15px;
   }
   .observation-heading h2 {
-    font-size: 37px;
+    font-size: clamp(26px, 6.5vw, 34px);
   }
   .observation-heading p {
     font-size: 11px;
-    line-height: 1.9;
-    margin-top: 20px;
+    line-height: 1.7;
+    margin-top: 10px;
     max-width: none;
   }
   .graph-wrap {
-    width: 125%;
-    margin-left: -12.5%;
-    height: 240px;
+    width: 110%;
+    margin-left: -5%;
+    height: clamp(180px, 26svh, 230px);
     min-height: 0;
-    margin-top: 10px;
+    margin-top: 5px;
   }
   .system-graph text {
     font-size: 19px;
@@ -1837,8 +1874,13 @@ section {
     height: 230svh;
   }
   .archive-stage {
-    padding: 108px 8% 25px;
-    min-height: 750px;
+    padding: clamp(65px, 10svh, 90px) 7% clamp(14px, 2.5svh, 24px);
+    min-height: 0;
+    height: 100svh;
+    max-height: 100svh;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
   }
   .archive-stage .small-note {
     max-width: 105px;
@@ -1846,98 +1888,140 @@ section {
     line-height: 1.5;
   }
   .archive-heading {
-    top: 170px;
-    left: 8%;
-    max-width: 360px;
+    position: relative;
+    top: auto;
+    left: auto;
+    max-width: 100%;
+    z-index: 2;
   }
   .archive-heading h2 {
-    font-size: clamp(32px, 7vw, 38px);
+    font-size: clamp(24px, 6vw, 32px);
     line-height: 1.25;
     font-weight: 700;
   }
   .archive-heading p {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-top: 15px;
-    max-width: 360px;
+    font-size: 12.5px;
+    line-height: 1.55;
+    margin-top: 6px;
+    max-width: 100%;
   }
   .archive-stage .section-top .eyebrow {
     font-size: 14px;
   }
   .archive-sequence {
-    width: 113vw;
-    height: 113vw;
-    right: -6.5%;
+    width: clamp(210px, 65vw, 310px);
+    height: clamp(210px, 65vw, 310px);
+    right: -4%;
     top: auto;
-    bottom: 92px;
-    transform: none;
+    bottom: clamp(60px, 10svh, 85px);
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
   }
   .archive-captions {
-    bottom: 35px;
-    left: 8%;
-    right: 8%;
-    gap: 8px;
+    bottom: clamp(14px, 2.5svh, 24px);
+    left: 7%;
+    right: 7%;
+    gap: 6px;
+    z-index: 3;
+    display: flex;
   }
   .archive-caption {
-    padding: 12px 10px;
+    padding: 8px 10px;
     border-radius: 12px;
+    flex: 1;
   }
   .archive-caption strong {
     font-size: 11px;
   }
   .archive-caption small {
-    font-size: 8px;
+    font-size: 9px;
   }
   .gallery-stage {
-    padding: 75px 0 40px;
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    max-height: 100svh;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(60px, 9.5svh, 80px) 0 clamp(10px, 2svh, 20px);
+    box-sizing: border-box;
   }
   .gallery-heading {
     display: block;
-    padding: 0 8%;
+    padding: 0 7%;
+    margin-bottom: clamp(6px, 1.5svh, 12px);
   }
   .gallery-heading h2 {
-    font-size: clamp(32px, 7.5vw, 38px);
+    font-size: clamp(22px, 5.5vw, 28px);
+    line-height: 1.25;
   }
   .gallery-heading > p {
     max-width: none;
-    font-size: 15px;
-    line-height: 1.6;
-    margin-top: 16px;
+    font-size: 11.5px;
+    line-height: 1.5;
+    margin-top: 3px;
   }
   .gallery-window {
-    margin: 0 8%;
+    margin: 0 6%;
+    overflow: visible;
+  }
+  .gallery-track {
+    display: flex;
+    width: max-content;
+    gap: 16px;
+    align-items: stretch;
   }
   .work-card {
-    display: block;
-    border-radius: 18px;
+    width: min(82vw, 340px);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    max-height: clamp(360px, 56svh, 460px);
+    overflow: hidden;
+    background: #ffffffeb;
   }
   .work-image {
-    height: 210px;
+    height: clamp(120px, 17svh, 160px);
     min-height: 0;
-    padding: 25px;
+    padding: 14px 16px;
+    flex-shrink: 0;
   }
   .work-body {
-    padding: 23px;
+    padding: 14px 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
   }
   .work-body h3 {
-    font-size: 21px;
+    font-size: 16px;
+    line-height: 1.35;
+    margin: 3px 0 5px;
   }
   .work-body > p {
-    font-size: 12px;
-    line-height: 1.9;
+    font-size: 11px;
+    line-height: 1.6;
   }
   .text-link {
     font-size: 12px;
   }
   .work-actions {
-    margin-top: 20px;
+    margin-top: 10px;
   }
   .work-body .eyebrow {
-    font-size: 9px;
+    font-size: 8.5px;
   }
   .gallery-footer {
-    font-size: 9px;
-    padding: 25px 8% 0;
+    font-size: 8.5px;
+    padding: 10px 7% 0;
+    display: flex;
+    justify-content: space-between;
   }
   .contact-section {
     padding: 85px 8% 0;
