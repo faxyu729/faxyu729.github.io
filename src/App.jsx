@@ -18,8 +18,8 @@ const Arrow = ({ diagonal = false }) => (
     />
   </svg>
 );
-const names = ["序章", "關於", "成長", "拆解", "作品", "聯絡"],
-  ids = ["home", "about", "observation", "archive", "works", "contact"];
+const names = ["序章", "關於", "成長", "初衷", "作品", "聯絡"],
+  ids = ["home", "about", "growth", "origin", "works", "contact"];
 
 function WorkCard({ work, index }) {
   const [open, setOpen] = useState(false),
@@ -149,7 +149,7 @@ function Portfolio() {
     const onScroll = () => setScrolled(window.scrollY > 35);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    const sections = ids.map((id) => document.getElementById(id));
+    const sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
     const observer = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => {
@@ -162,7 +162,8 @@ function Portfolio() {
     let secondFrame;
     const firstFrame = requestAnimationFrame(() => {
       secondFrame = requestAnimationFrame(() => {
-        const id = window.location.hash.slice(1);
+        const hash = window.location.hash.slice(1);
+        const id = hash === 'observation' ? 'growth' : hash === 'archive' ? 'origin' : hash;
         if (ids.includes(id) || id === 'main') {
           document.getElementById(id)?.scrollIntoView({ behavior: 'instant', block: 'start' });
         }
@@ -295,7 +296,7 @@ function Portfolio() {
     };
   }, []);
   useEffect(() => {
-    const el = document.getElementById("observation");
+    const el = document.getElementById("growth") || document.getElementById("observation");
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
@@ -311,14 +312,12 @@ function Portfolio() {
   const navItems = [
     ["home", "首頁"],
     ["about", "關於我"],
-    ["observation", "成長軌跡"],
+    ["growth", "成長軌跡"],
+    ["origin", "探索初衷"],
     ["works", "精選作品"],
     ["contact", "聯絡我"],
   ];
-  const currentNavId =
-    ids[active] === "archive"
-      ? "works"
-      : ids[active];
+  const currentNavId = ids[active];
   return (
     <div
       ref={page}
@@ -352,7 +351,7 @@ function Portfolio() {
                   const target = document.getElementById(id);
                   if (target) {
                     e.preventDefault();
-                    target.scrollIntoView({ behavior: "smooth" });
+                    target.scrollIntoView({ behavior: "smooth", block: "start" });
                     window.history.pushState(null, "", `#${id}`);
                   }
                 }}
@@ -397,6 +396,14 @@ function Portfolio() {
           <a
             key={id}
             href={`#${id}`}
+            onClick={(e) => {
+              const target = document.getElementById(id);
+              if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: "smooth", block: "start" });
+                window.history.pushState(null, "", `#${id}`);
+              }
+            }}
             className={active === i ? "active" : ""}
             aria-label={`${i + 1} ${names[i]}`}
             aria-current={active === i ? "location" : undefined}
@@ -527,10 +534,11 @@ function Portfolio() {
           </div>
         </section>
         <section
-          id="observation"
+          id="growth"
           className="observation scroll-scene"
           aria-labelledby="observation-title"
         >
+          <span id="observation" className="scroll-anchor" aria-hidden="true" />
           <div className="scene-sticky observation-stage">
             <div className="observation-heading reveal">
               <div>
@@ -654,23 +662,22 @@ function Portfolio() {
           </div>
         </section>
         <section
-          id="archive"
+          id="origin"
           className="archive scroll-scene"
-          aria-labelledby="archive-title"
+          aria-labelledby="origin-title"
         >
+          <span id="archive" className="scroll-anchor" aria-hidden="true" />
           <div className="scene-sticky archive-stage">
             <div className="archive-wash" aria-hidden="true" />
             <div className="section-top">
-              <span className="eyebrow">03 / 展開想法</span>
-              <span className="small-note">從封面，走進內容。</span>
+              <span className="eyebrow">03 / 探索初衷</span>
+              <span className="small-note">在未知中尋找秩序。</span>
             </div>
             <div className="archive-heading">
-              <h2 id="archive-title">
-                每一層，
-                <br />
-                都有新的理解。
+              <h2 id="origin-title">
+                在未知中尋找秩序。
               </h2>
-              <p>讓作品展開，也讓思考的脈絡浮現。</p>
+              <p>不只是寫程式，更是透過邏輯拆解世界，將複雜的雜訊整理成清晰的脈絡。</p>
             </div>
             <div className="archive-sequence">
               <SequenceCanvas

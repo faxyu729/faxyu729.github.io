@@ -96,7 +96,7 @@ export default function useStoryMotion(page, core, archive, enabled) {
       const o = gsap.timeline({
         scrollTrigger: {
           id: "observation",
-          trigger: "#observation",
+          trigger: "#growth, #observation",
           start: "top top",
           end: "bottom bottom",
           scrub: 0.3,
@@ -122,31 +122,34 @@ export default function useStoryMotion(page, core, archive, enabled) {
         { opacity: 0.15, y: 28, duration: 0.4 },
         0.15,
       );
-      const ap = { p: 0 },
-        a = gsap.timeline({
-          scrollTrigger: {
-            id: "archive",
-            trigger: "#archive",
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 0.35,
+      const archiveStage = document.querySelector(".archive-stage");
+      if (archiveStage && archive?.current) {
+        const ap = { p: 0 },
+          a = gsap.timeline({
+            scrollTrigger: {
+              id: "archive",
+              trigger: "#origin, #archive",
+              start: "top top",
+              end: "bottom bottom",
+              scrub: 0.35,
+            },
+          });
+        a.to(
+          ap,
+          {
+            p: 1,
+            duration: 1,
+            ease: "none",
+            onUpdate: () => archive.current?.seek(ap.p),
           },
-        });
-      a.to(
-        ap,
-        {
-          p: 1,
-          duration: 1,
-          ease: "none",
-          onUpdate: () => archive.current?.seek(ap.p),
-        },
-        0,
-      )
-        .from(
-          ".archive-caption",
-          { opacity: 0, y: 40, stagger: 0.17, duration: 0.25 },
-          0.15,
-        );
+          0,
+        )
+          .from(
+            ".archive-caption",
+            { opacity: 0, y: 40, stagger: 0.17, duration: 0.25 },
+            0.15,
+          );
+      }
       const mm = gsap.matchMedia();
       mm.add("(min-width: 901px)", () => {
         const gallery = document.querySelector(".gallery-track"),
