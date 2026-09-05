@@ -131,7 +131,7 @@ export default function useStoryMotion(page, core, archive, enabled) {
           a = gsap.timeline({
             scrollTrigger: {
               id: "archive",
-              trigger: "#origin, #archive",
+              trigger: "#origin",
               start: "top top",
               end: "bottom bottom",
               scrub: 0.15,
