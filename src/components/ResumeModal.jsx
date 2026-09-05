@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { resume } from "../content";
+import { resume } from "../portfolioContent";
 import { useMotionPreference } from "../hooks/useMotionPreference";
 
 export default function ResumeModal({ isOpen, onClose }) {

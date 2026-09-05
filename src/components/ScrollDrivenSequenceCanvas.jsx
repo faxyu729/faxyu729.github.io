@@ -5,8 +5,8 @@ import {
   frameUrl,
   idlePreloadSequence,
   nearestFrame,
-} from "../lib/sequence";
-export default forwardRef(function SequenceCanvas(
+} from "../lib/frameSequence";
+export default forwardRef(function ScrollDrivenSequenceCanvas(
   { scene, label, eager = false, idlePreload = false },
   ref,
 ) {

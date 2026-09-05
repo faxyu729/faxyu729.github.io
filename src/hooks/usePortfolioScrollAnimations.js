@@ -5,7 +5,7 @@ gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({
   ignoreMobileResize: true,
 });
-export default function useStoryMotion(page, core, archive, enabled) {
+export default function usePortfolioScrollAnimations(page, core, archive, enabled) {
   useEffect(() => {
     if (!enabled) return;
     const ctx = gsap.context(() => {
