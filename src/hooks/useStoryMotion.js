@@ -22,7 +22,7 @@ export default function useStoryMotion(page, core, archive, enabled) {
             trigger: "#home",
             start: "top top",
             end: "bottom bottom",
-            scrub: 0.35,
+            scrub: 0.15,
             invalidateOnRefresh: true,
           },
         }),
@@ -99,7 +99,7 @@ export default function useStoryMotion(page, core, archive, enabled) {
           trigger: "#growth, #observation",
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.3,
+          scrub: 0.15,
         },
       });
       o.from(
@@ -131,7 +131,7 @@ export default function useStoryMotion(page, core, archive, enabled) {
               trigger: "#origin, #archive",
               start: "top top",
               end: "bottom bottom",
-              scrub: 0.35,
+              scrub: 0.15,
             },
           });
         a.to(
@@ -162,7 +162,7 @@ export default function useStoryMotion(page, core, archive, enabled) {
             trigger: "#works",
             start: "top top",
             end: "bottom bottom",
-            scrub: 0.4,
+            scrub: 0.2,
             invalidateOnRefresh: true,
           },
         });
@@ -201,21 +201,21 @@ export default function useStoryMotion(page, core, archive, enabled) {
         opacity: 0,
         stagger: 0.08,
         scrollTrigger: {
-          trigger: "#contact",
+          trigger: ".contact-section",
           start: "top 80%",
-          end: "top 15%",
-          scrub: 0.5,
+          end: "top 30%",
+          scrub: 0.2,
         },
       });
       gsap.from(".contact-reveal", {
-        y: 45,
+        y: 40,
         opacity: 0,
         stagger: 0.1,
         scrollTrigger: {
           trigger: ".contact-links",
           start: "top 95%",
           end: "top 65%",
-          scrub: 0.4,
+          scrub: 0.2,
         },
       });
       gsap.utils
@@ -228,7 +228,7 @@ export default function useStoryMotion(page, core, archive, enabled) {
               trigger: el,
               start: "top 94%",
               end: "top 76%",
-              scrub: 0.4,
+              scrub: 0.2,
             },
           }),
         );

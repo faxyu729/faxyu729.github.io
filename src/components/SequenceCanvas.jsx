@@ -28,7 +28,7 @@ export default forwardRef(function SequenceCanvas(
     const small =
         window.matchMedia("(max-width: 700px)").matches ||
         navigator.connection?.saveData,
-      maxCache = 12,
+      maxCache = 36,
       cache = new Map(),
       pending = new Map(),
       failed = new Set();
@@ -36,6 +36,7 @@ export default forwardRef(function SequenceCanvas(
       near = eager,
       target = frameAt(progress.current),
       raf = 0,
+      seekRaf = 0,
       last = -1;
     const paint = () => {
       raf = 0;
@@ -108,7 +109,12 @@ export default forwardRef(function SequenceCanvas(
         if (Math.abs(index - target) > 6) controller.abort();
       }
       queuePaint();
-      pump();
+      if (!seekRaf) {
+        seekRaf = requestAnimationFrame(() => {
+          seekRaf = 0;
+          pump();
+        });
+      }
     };
     const resize = () => {
       const size = Math.min(
@@ -143,6 +149,7 @@ export default forwardRef(function SequenceCanvas(
       io.disconnect();
       ro.disconnect();
       cancelAnimationFrame(raf);
+      if (seekRaf) cancelAnimationFrame(seekRaf);
       for (const c of pending.values()) c.abort();
       for (const b of cache.values()) b.close?.();
     };
