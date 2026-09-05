@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { works, contact } from "./content";
+import { works, contact, resume } from "./content";
 import {
   MotionPreferenceProvider,
   useMotionPreference,
 } from "./hooks/useMotionPreference";
 import SequenceCanvas from "./components/SequenceCanvas";
+import ResumeModal from "./components/ResumeModal";
 import useStoryMotion from "./hooks/useStoryMotion";
 const Arrow = ({ diagonal = false }) => (
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -62,6 +63,16 @@ function WorkCard({ work, index }) {
         <span className="eyebrow">{work.note}</span>
         <h3>{work.name}</h3>
         <p>{work.description}</p>
+        {work.metrics && (
+          <div className="work-metrics" aria-label="成果關鍵指標">
+            {work.metrics.map((m) => (
+              <span className="work-metric-badge" key={m.label}>
+                <span className="metric-label">{m.label}</span>
+                <span className="metric-value">{m.value}</span>
+              </span>
+            ))}
+          </div>
+        )}
         <div className="work-actions">
           <a
             className="text-link"
@@ -143,7 +154,8 @@ function Portfolio() {
   const [active, setActive] = useState(0),
     [menu, setMenu] = useState(false),
     [scrolled, setScrolled] = useState(false),
-    [hoveredNode, setHoveredNode] = useState(null);
+    [hoveredNode, setHoveredNode] = useState(null),
+    [resumeOpen, setResumeOpen] = useState(false);
   useStoryMotion(page, core, archive, motionEnabled);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 35);
@@ -373,6 +385,15 @@ function Portfolio() {
         <div className="nav-tools">
           <motion.button
             whileTap={motionEnabled ? { scale: 0.94 } : undefined}
+            className="resume-nav-btn"
+            onClick={() => setResumeOpen(true)}
+            aria-label="檢視個人簡歷"
+          >
+            <span className="resume-icon" aria-hidden="true">📄</span>
+            <span>簡歷 / CV</span>
+          </motion.button>
+          <motion.button
+            whileTap={motionEnabled ? { scale: 0.94 } : undefined}
             className="motion-toggle"
             aria-pressed={motionEnabled}
             onClick={toggleMotion}
@@ -512,6 +533,17 @@ function Portfolio() {
                   <br />
                   近期帶領「腦動開發」團隊參與女捷思大賽，主導 ELK 系統架構與視覺化設計。這裡收錄我的專案實作與理論探索，為未來的學術研究奠定基礎。
                 </p>
+                <div className="about-actions">
+                  <motion.button
+                    type="button"
+                    whileHover={motionEnabled ? { scale: 1.02 } : undefined}
+                    whileTap={motionEnabled ? { scale: 0.96 } : undefined}
+                    className="pill primary about-resume-btn"
+                    onClick={() => setResumeOpen(true)}
+                  >
+                    檢視個人簡歷 / CV <Arrow diagonal />
+                  </motion.button>
+                </div>
               </div>
             </div>
           </div>
@@ -687,6 +719,7 @@ function Portfolio() {
               <SequenceCanvas
                 ref={archive}
                 scene="archive"
+                idlePreload
                 label="以現有作品簡報製作的立體檔案，隨滾動旋轉並分層展開"
               />
             </div>
@@ -802,6 +835,7 @@ function Portfolio() {
         </section>
       </main>
       <div className="cursor-glow" aria-hidden="true" />
+      <ResumeModal isOpen={resumeOpen} onClose={() => setResumeOpen(false)} />
     </div>
   );
 }

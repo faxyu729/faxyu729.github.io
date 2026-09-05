@@ -1,8 +1,13 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { useMotionPreference } from "../hooks/useMotionPreference";
-import { frameAt, frameUrl, nearestFrame } from "../lib/sequence";
+import {
+  frameAt,
+  frameUrl,
+  idlePreloadSequence,
+  nearestFrame,
+} from "../lib/sequence";
 export default forwardRef(function SequenceCanvas(
-  { scene, label, eager = false },
+  { scene, label, eager = false, idlePreload = false },
   ref,
 ) {
   const { motionEnabled } = useMotionPreference(),
@@ -154,6 +159,10 @@ export default forwardRef(function SequenceCanvas(
       for (const b of cache.values()) b.close?.();
     };
   }, [scene, motionEnabled, eager]);
+  useEffect(() => {
+    if (!idlePreload || eager || !motionEnabled) return;
+    return idlePreloadSequence(scene);
+  }, [idlePreload, eager, scene, motionEnabled]);
   return (
     <div
       ref={wrapper}
