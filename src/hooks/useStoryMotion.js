@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({
+  ignoreMobileResize: true,
+});
 export default function useStoryMotion(page, core, archive, enabled) {
   useEffect(() => {
     if (!enabled) return;
@@ -150,10 +153,9 @@ export default function useStoryMotion(page, core, archive, enabled) {
             0.15,
           );
       }
-      const mm = gsap.matchMedia();
-      mm.add("(min-width: 901px)", () => {
-        const gallery = document.querySelector(".gallery-track"),
-          viewport = document.querySelector(".gallery-window");
+      const gallery = document.querySelector(".gallery-track"),
+        viewport = document.querySelector(".gallery-window");
+      if (gallery && viewport) {
         gsap.to(gallery, {
           x: () => -Math.max(0, gallery.scrollWidth - viewport.clientWidth),
           ease: "none",
@@ -166,35 +168,20 @@ export default function useStoryMotion(page, core, archive, enabled) {
             invalidateOnRefresh: true,
           },
         });
-        gsap.fromTo(
-          ".gallery-cool",
-          { clipPath: "inset(0 100% 0 0)" },
-          {
-            clipPath: "inset(0 0% 0 0)",
-            ease: "none",
-            scrollTrigger: {
-              trigger: "#works",
-              start: "top top",
-              end: "bottom bottom",
-              scrub: true,
-            },
+      }
+      gsap.fromTo(
+        ".gallery-cool",
+        { clipPath: "inset(0 100% 0 0)" },
+        {
+          clipPath: "inset(0 0% 0 0)",
+          ease: "none",
+          scrollTrigger: {
+            trigger: "#works",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true,
           },
-        );
-      });
-      mm.add("(max-width: 900px)", () =>
-        gsap.fromTo(
-          ".gallery-cool",
-          { clipPath: "inset(0 0 100% 0)" },
-          {
-            clipPath: "inset(0 0 0% 0)",
-            scrollTrigger: {
-              trigger: "#works",
-              start: "top 50%",
-              end: "bottom bottom",
-              scrub: true,
-            },
-          },
-        ),
+        },
       );
       gsap.from(".contact-ray", {
         scaleX: 0.2,

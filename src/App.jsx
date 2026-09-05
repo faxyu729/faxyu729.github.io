@@ -29,7 +29,7 @@ function WorkCard({ work, index }) {
     <motion.article
       className={`work-card work-${index}`}
       onFocusCapture={(event) => {
-        if (!motionEnabled || window.innerWidth <= 900) return;
+        if (!motionEnabled) return;
         const card = event.currentTarget;
         const rect = card.getBoundingClientRect();
         if (rect.left >= 0 && rect.right <= window.innerWidth) return;
