@@ -677,7 +677,11 @@ function Portfolio() {
               <h2 id="origin-title">
                 在未知中尋找秩序。
               </h2>
-              <p>不只是寫程式，更是透過邏輯拆解世界，將複雜的雜訊整理成清晰的脈絡。</p>
+              <p>
+                不只是寫程式，更是透過邏輯拆解世界，
+                <br />
+                將複雜的雜訊整理成清晰的脈絡。
+              </p>
             </div>
             <div className="archive-sequence">
               <SequenceCanvas

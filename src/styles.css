@@ -84,7 +84,7 @@ section {
   box-shadow:
     0 10px 40px #344b7510,
     inset 0 1px 0 #fff;
-  backdrop-filter: blur(22px) saturate(1.3);
+  backdrop-filter: blur(14px) saturate(1.2);
 }
 .eyebrow {
   font-size: 11px;
@@ -371,7 +371,9 @@ section {
   height: 60vw;
   right: -10%;
   top: 0;
-  filter: blur(55px);
+  filter: blur(45px);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
   background: conic-gradient(
     from 20deg,
     transparent,
@@ -891,9 +893,11 @@ section {
   left: -40%;
   top: -60%;
   background: conic-gradient(#dce9fb, #e9e5f5, #f6f6fb, #dce9fb);
-  filter: blur(80px);
+  filter: blur(50px);
   border-radius: 50%;
   opacity: 0.75;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 .archive-stage .section-top .eyebrow {
   font-size: 15px;
@@ -904,7 +908,7 @@ section {
   z-index: 2;
   left: 9%;
   top: 28%;
-  max-width: 480px;
+  max-width: 540px;
 }
 .archive-heading h2 {
   font-size: clamp(40px, 4.5vw, 48px);
@@ -923,7 +927,7 @@ section {
   line-height: 1.6;
   color: #52657d;
   margin-top: 0;
-  max-width: 480px;
+  max-width: 540px;
 }
 .archive-sequence {
   position: absolute;
@@ -933,7 +937,8 @@ section {
   max-height: 870px;
   right: -2%;
   top: 50%;
-  transform: translateY(-46%);
+  transform: translateY(-46%) translateZ(0);
+  will-change: transform;
 }
 .archive-captions {
   position: absolute;
