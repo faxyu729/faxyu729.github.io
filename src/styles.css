@@ -1740,8 +1740,8 @@ section {
     font-size: 9px;
   }
   .object-label-a {
-    left: 4%;
-    top: 14%;
+    left: 6%;
+    top: 20%;
   }
   .object-label-b {
     left: 6%;
@@ -1765,7 +1765,7 @@ section {
   .hero-second {
     right: 7%;
     left: 7%;
-    top: clamp(68px, 11svh, 88px);
+    top: clamp(60px, 9.5svh, 78px);
     max-width: none;
     width: auto;
     z-index: 4;
@@ -1780,7 +1780,7 @@ section {
   .hero-second > p:last-child {
     font-size: 11.5px;
     line-height: 1.6;
-    margin: 10px 0;
+    margin: 8px 0 12px;
   }
   .hero-aurora {
     width: 120vw;
@@ -1898,6 +1898,7 @@ section {
   }
   .observation-bottom {
     margin-top: 4px;
+    transform: translateY(-10pt);
     gap: 15px;
     justify-content: flex-start;
   }
@@ -1945,11 +1946,11 @@ section {
     font-size: 14px;
   }
   .archive-sequence {
-    width: min(65vw, 260px);
-    height: min(65vw, 260px);
-    right: 2%;
+    width: min(78vw, 320px);
+    height: min(78vw, 320px);
+    right: 0%;
     top: auto;
-    bottom: clamp(65px, 11svh, 95px);
+    bottom: clamp(58px, 9.5svh, 88px);
     position: absolute;
     z-index: 1;
     pointer-events: none;
